@@ -62,3 +62,30 @@ if(form){
     form.reset();
   });
 }
+
+// Menu hambúrguer (celular/tablet); no desktop o menu fica sempre visível
+var menuBtn = document.querySelector('.menu-toggle');
+var menuNav = document.getElementById('menu-principal');
+if(menuBtn && menuNav){
+  var setMenu = function(open){
+    menuNav.classList.toggle('is-open', open);
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuBtn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  };
+  menuBtn.addEventListener('click', function(){
+    setMenu(menuBtn.getAttribute('aria-expanded') !== 'true');
+  });
+  menuNav.addEventListener('click', function(e){
+    if(e.target.closest('a')){ setMenu(false); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true'){
+      setMenu(false);
+      menuBtn.focus();
+    }
+  });
+  document.addEventListener('click', function(e){
+    if(!header.contains(e.target)){ setMenu(false); }
+  });
+  window.matchMedia('(min-width: 980px)').addEventListener('change', function(){ setMenu(false); });
+}
